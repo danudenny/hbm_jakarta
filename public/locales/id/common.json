@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "services": "Layanan",
+    "about": "Tentang Kami",
+    "testimonials": "Testimoni",
+    "contact_us": "Hubungi Kami",
+    "login": "Masuk",
+    "dashboard": "Dasbor",
+    "admin_panel": "Panel Admin",
+    "logout": "Keluar",
+    "language": "Bahasa"
+  }
+}
