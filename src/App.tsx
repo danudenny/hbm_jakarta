@@ -1,5 +1,10 @@
 import { useEffect, useState, lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "react-hot-toast";
 import AOS from "aos";
@@ -21,7 +26,9 @@ const TrustedBy = lazy(() => import("./components/TrustedBy"));
 const ServicesSection = lazy(() => import("./components/ServicesSection"));
 const ProcessSection = lazy(() => import("./components/ProcessSection"));
 const AboutSection = lazy(() => import("./components/AboutSection"));
-const TestimonialsSection = lazy(() => import("./components/TestimonialsSection"));
+const TestimonialsSection = lazy(
+  () => import("./components/TestimonialsSection")
+);
 const FAQSection = lazy(() => import("./components/FAQSection"));
 const ContactSection = lazy(() => import("./components/ContactSection"));
 const FloatingSocial = lazy(() => import("./components/FloatingSocial"));
@@ -33,18 +40,38 @@ const NotFound = lazy(() => import("./components/NotFound"));
 const AdminLogin = lazy(() => import("./components/admin/AdminLogin"));
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./components/admin/AdminDashboard"));
-const HeroSectionEditor = lazy(() => import("./components/admin/HeroSectionEditor"));
-const TrustedByEditor = lazy(() => import("./components/admin/TrustedByEditor"));
-const ServicesSectionEditor = lazy(() => import("./components/admin/ServicesSectionEditor"));
-const ProcessSectionEditor = lazy(() => import("./components/admin/ProcessSectionEditor"));
-const AboutSectionEditor = lazy(() => import("./components/admin/AboutSectionEditor"));
-const TestimonialsSectionEditor = lazy(() => import("./components/admin/TestimonialsSectionEditor"));
-const FAQSectionEditor = lazy(() => import("./components/admin/FAQSectionEditor"));
-const ContactSectionEditor = lazy(() => import("./components/admin/ContactSectionEditor"));
-const FloatingSocialEditor = lazy(() => import("./components/admin/FloatingSocialEditor"));
+const HeroSectionEditor = lazy(
+  () => import("./components/admin/HeroSectionEditor")
+);
+const TrustedByEditor = lazy(
+  () => import("./components/admin/TrustedByEditor")
+);
+const ServicesSectionEditor = lazy(
+  () => import("./components/admin/ServicesSectionEditor")
+);
+const ProcessSectionEditor = lazy(
+  () => import("./components/admin/ProcessSectionEditor")
+);
+const AboutSectionEditor = lazy(
+  () => import("./components/admin/AboutSectionEditor")
+);
+const TestimonialsSectionEditor = lazy(
+  () => import("./components/admin/TestimonialsSectionEditor")
+);
+const FAQSectionEditor = lazy(
+  () => import("./components/admin/FAQSectionEditor")
+);
+const ContactSectionEditor = lazy(
+  () => import("./components/admin/ContactSectionEditor")
+);
+const FloatingSocialEditor = lazy(
+  () => import("./components/admin/FloatingSocialEditor")
+);
 const SEOEditor = lazy(() => import("./components/admin/SEOEditor"));
 const SettingsPage = lazy(() => import("./components/admin/SettingsPage"));
-const TranslationsManager = lazy(() => import("./components/admin/TranslationsManager"));
+const TranslationsManager = lazy(
+  () => import("./components/admin/TranslationsManager")
+);
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -106,50 +133,74 @@ const AppContent = () => {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/admin/login" element={
-        <Suspense fallback={<LoadingSpinner />}>
-          <AdminLogin />
-        </Suspense>
-      } />
+      <Route
+        path="/admin/login"
+        element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <AdminLogin />
+          </Suspense>
+        }
+      />
 
       {/* Admin Panel Routes */}
-      <Route path="/admin" element={
-        <Suspense fallback={<LoadingSpinner />}>
-          <AdminLayout />
-        </Suspense>
-      }>
-        <Route index element={
+      <Route
+        path="/admin"
+        element={
           <Suspense fallback={<LoadingSpinner />}>
-            <AdminDashboard />
+            <AdminLayout />
           </Suspense>
-        } />
+        }
+      >
+        <Route
+          index
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AdminDashboard />
+            </Suspense>
+          }
+        />
 
         {/* Section Editors */}
-        <Route path="sections/hero" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <HeroSectionEditor />
-          </Suspense>
-        } />
-        <Route path="sections/trusted-by" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <TrustedByEditor />
-          </Suspense>
-        } />
-        <Route path="sections/services" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <ServicesSectionEditor />
-          </Suspense>
-        } />
-        <Route path="sections/process" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <ProcessSectionEditor />
-          </Suspense>
-        } />
-        <Route path="sections/about" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <AboutSectionEditor />
-          </Suspense>
-        } />
+        <Route
+          path="sections/hero"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <HeroSectionEditor />
+            </Suspense>
+          }
+        />
+        <Route
+          path="sections/trusted-by"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <TrustedByEditor />
+            </Suspense>
+          }
+        />
+        <Route
+          path="sections/services"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ServicesSectionEditor />
+            </Suspense>
+          }
+        />
+        <Route
+          path="sections/process"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ProcessSectionEditor />
+            </Suspense>
+          }
+        />
+        <Route
+          path="sections/about"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <AboutSectionEditor />
+            </Suspense>
+          }
+        />
         <Route
           path="sections/testimonials"
           element={
@@ -158,16 +209,22 @@ const AppContent = () => {
             </Suspense>
           }
         />
-        <Route path="sections/faqs" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <FAQSectionEditor />
-          </Suspense>
-        } />
-        <Route path="sections/contact" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <ContactSectionEditor />
-          </Suspense>
-        } />
+        <Route
+          path="sections/faqs"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <FAQSectionEditor />
+            </Suspense>
+          }
+        />
+        <Route
+          path="sections/contact"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <ContactSectionEditor />
+            </Suspense>
+          }
+        />
         <Route
           path="sections/floating-social"
           element={
@@ -176,21 +233,30 @@ const AppContent = () => {
             </Suspense>
           }
         />
-        <Route path="seo" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <SEOEditor />
-          </Suspense>
-        } />
-        <Route path="settings" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <SettingsPage />
-          </Suspense>
-        } />
-        <Route path="translations" element={
-          <Suspense fallback={<LoadingSpinner />}>
-            <TranslationsManager />
-          </Suspense>
-        } />
+        <Route
+          path="seo"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <SEOEditor />
+            </Suspense>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <SettingsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="translations"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <TranslationsManager />
+            </Suspense>
+          }
+        />
       </Route>
 
       {/* Main Landing Page */}
@@ -225,9 +291,9 @@ const AppContent = () => {
               <Suspense fallback={<LoadingSpinner />}>
                 <TestimonialsSection />
               </Suspense>
-              <Suspense fallback={<LoadingSpinner />}>
+              {/* <Suspense fallback={<LoadingSpinner />}>
                 <FAQSection />
-              </Suspense>
+              </Suspense> */}
               <Suspense fallback={<LoadingSpinner />}>
                 <ContactSection />
               </Suspense>
@@ -240,11 +306,14 @@ const AppContent = () => {
       />
 
       {/* 404 Not Found */}
-      <Route path="*" element={
-        <Suspense fallback={<LoadingSpinner />}>
-          <NotFound />
-        </Suspense>
-      } />
+      <Route
+        path="*"
+        element={
+          <Suspense fallback={<LoadingSpinner />}>
+            <NotFound />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 };
@@ -252,7 +321,7 @@ const AppContent = () => {
 function App() {
   const { t, i18n } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     // Initialize AOS
     AOS.init({
@@ -262,29 +331,31 @@ function App() {
     });
 
     // Set initial document direction based on language
-    const currentLang = i18n.language || 'en';
+    const currentLang = i18n.language || "en";
     const LANGUAGES = {
-      en: { dir: 'ltr' },
-      id: { dir: 'ltr' },
-      ja: { dir: 'ltr' },
-      zh: { dir: 'ltr' },
-      de: { dir: 'ltr' },
-      ar: { dir: 'rtl' }
+      en: { dir: "ltr" },
+      id: { dir: "ltr" },
+      ja: { dir: "ltr" },
+      zh: { dir: "ltr" },
+      de: { dir: "ltr" },
+      ar: { dir: "rtl" },
     };
-    
+
     const langDetails = LANGUAGES[currentLang as keyof typeof LANGUAGES];
     if (langDetails) {
       document.documentElement.dir = langDetails.dir;
       document.documentElement.lang = currentLang;
     }
   }, [i18n.language]);
-  
+
   return (
     <HelmetProvider>
       <AuthProvider>
         <ContentSyncProvider>
           <Router>
-            {isLoading && <HBMLoadingSpinner onLoadComplete={() => setIsLoading(false)} />}
+            {isLoading && (
+              <HBMLoadingSpinner onLoadComplete={() => setIsLoading(false)} />
+            )}
             <Toaster position="top-right" />
             <div className="min-h-screen">
               <AppContent />

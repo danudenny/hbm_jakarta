@@ -30,7 +30,7 @@ const HeroSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [heroData, setHeroData] = useState<HeroSectionData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { t } = useTranslation('section.hero');
+  const { t } = useTranslation("section.hero");
 
   useEffect(() => {
     const fetchHeroData = async () => {
@@ -85,26 +85,29 @@ const HeroSection: React.FC = () => {
             <div className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-sm border border-accent-light px-4 py-1 mb-3">
               <Circle className="w-3 h-3 mr-2 fill-accent-light text-accent-light" />
               <h5 className="font-heading text-accent-light font-medium tracking-wider">
-                {t('subtitle', 'PROFESSIONAL VISA SERVICES')}
+                {t("subtitle", "PROFESSIONAL VISA SERVICES")}
               </h5>
             </div>
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-              {t('title_first_line', 'Simplified Work Permit')}{" "}
+            <h1 className="font-hero-title text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-tight">
+              {t("title_first_line", "Simplified Work Permit")}{" "}
               <br className="hidden md:block" />
               <span className="text-accent-light">
-                {t('title_colored_part', 'Solutions for Expatriates')}
+                {t("title_colored_part", "Solutions for Expatriates")}
               </span>
             </h1>
             <p className="font-body text-white/90 text-lg md:text-xl mb-8 max-w-2xl">
-              {t('description', 'Expert consultation and comprehensive documentation services for foreign workers in Indonesia. We handle the complexity so you can focus on your work.')}
+              {t(
+                "description",
+                "Expert consultation and comprehensive documentation services for foreign workers in Indonesia. We handle the complexity so you can focus on your work."
+              )}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#services" className="btn btn-accent font-heading">
-                {t('cta_text', 'Our Services')}
+                {t("cta_text", "Our Services")}
                 <ArrowRight size={18} className="ml-2" />
               </a>
               <a href="#contact" className="btn btn-outline-white font-heading">
-                {t('contact_us', 'Contact Us')}
+                {t("contact_us", "Contact Us")}
               </a>
             </div>
           </div>
@@ -130,38 +133,51 @@ const HeroSection: React.FC = () => {
       )}
 
       <div className="container mx-auto px-4 md:px-6 py-24 relative z-10">
-        <div className="max-w-3xl">
+        <div className="">
           <div className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-sm border border-accent-light px-4 py-1 mb-3">
             <Circle className="w-3 h-3 mr-2 fill-accent-light text-accent-light" />
             <h5 className="font-heading text-accent-light font-medium tracking-wider">
-              {t('subtitle', heroData.subtitle || "PROFESSIONAL VISA SERVICES")}
+              {t("subtitle", heroData.subtitle || "PROFESSIONAL VISA SERVICES")}
             </h5>
           </div>
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+          <h1 className="font-jakarta font-[900] text-4xl md:text-5xl lg:text-6xl mt-2 text-white mb-6 leading-tight w-5xl">
             {/* Use separate complete translations for each part to handle different language structures */}
-            {t('title_first_line', heroData.title.split(" ").slice(0, -1).join(" "))}{" "}
+            {t(
+              "title_first_line",
+              heroData.title.split(" ").slice(0, -1).join(" ")
+            )}{" "}
             <br className="hidden md:block" />
             <span className="text-accent-light">
-              {t('title_colored_part', heroData.title.split(" ").slice(-1)[0])}
+              {t("title_colored_part", heroData.title.split(" ").slice(-1)[0])}
             </span>
           </h1>
           <p className="font-body text-white/90 text-lg md:text-xl mb-8 max-w-2xl">
-            {t('description', heroData.content.description)}
+            {t("description", heroData.content.description)}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a href={heroData.content.cta_link} className="btn btn-accent font-heading">
-              {t('cta_text', heroData.content.cta_text)}
+            <a
+              href={heroData.content.cta_link}
+              className="btn btn-accent font-heading"
+            >
+              {t("cta_text", heroData.content.cta_text)}
               <ArrowRight size={18} className="ml-2 rtl-flip" />
             </a>
             <a href="#contact" className="btn btn-outline-white font-heading">
-              {t('contact_us', 'Contact Us')}
+              {t("contact_us", "Contact Us")}
             </a>
           </div>
 
-          <StatsCounter stats={heroData.content.stats.map(stat => ({
-            ...stat,
-            label: t(`stats.${stat.label.toLowerCase().replace(/\s+/g, '_')}`, stat.label)
-          }))} />
+          <div className="max-w-3xl">
+            <StatsCounter
+              stats={heroData.content.stats.map((stat) => ({
+                ...stat,
+                label: t(
+                  `stats.${stat.label.toLowerCase().replace(/\s+/g, "_")}`,
+                  stat.label
+                ),
+              }))}
+            />
+          </div>
 
           <div className="mt-16 flex flex-col sm:flex-row items-start sm:items-center gap-6">
             {heroData.content.features &&
@@ -187,7 +203,9 @@ const HeroSection: React.FC = () => {
                     <h3 className="font-heading text-white font-semibold">
                       {t(`features.${index}.title`, feature.title)}
                     </h3>
-                    <p className="font-body text-white/70">{t(`features.${index}.description`, feature.description)}</p>
+                    <p className="font-body text-white/70">
+                      {t(`features.${index}.description`, feature.description)}
+                    </p>
                   </div>
                 </div>
               ))}

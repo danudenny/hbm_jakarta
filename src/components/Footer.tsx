@@ -1,16 +1,37 @@
 import React from "react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import useSiteSettings from "../hooks/useSiteSettings";
 
 const Footer: React.FC = () => {
+  const { t, i18n } = useTranslation("common");
+  const { settings } = useSiteSettings();
+  const isRTL = i18n.dir() === "rtl";
+
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className={`bg-gray-900 text-white ${isRTL ? "rtl" : "ltr"}`}>
       <div className="container mx-auto px-4 md:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-playfair text-2xl font-bold mb-6">HBM</h3>
-            <p className="text-gray-400 mb-6">
-              Professional immigration and work permit solutions for foreign
-              workers and companies in Indonesia.
-            </p>
+            <div className="mb-6">
+              {settings?.company_logo ? (
+                <img
+                  src={settings.company_logo}
+                  alt={settings.company_name || "Company Logo"}
+                  className="h-12 w-auto object-contain mb-4"
+                />
+              ) : (
+                <h3 className="font-heading text-2xl font-bold mb-4">
+                  {settings?.company_name || "HBM"}
+                </h3>
+              )}
+              <p className="text-gray-400 mb-6">
+                {t(
+                  "footer.description",
+                  "Professional immigration and work permit solutions for foreign workers and companies in Indonesia."
+                )}
+              </p>
+            </div>
             <div className="flex space-x-4">
               <a
                 href="#"
@@ -63,14 +84,16 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6">Our Services</h3>
+            <h3 className="font-heading font-bold text-lg mb-6">
+              {t("footer.services", "Our Services")}
+            </h3>
             <ul className="space-y-3">
               <li>
                 <a
                   href="#services"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  RPTKA Handling
+                  {t("footer.service1", "RPTKA Handling")}
                 </a>
               </li>
               <li>
@@ -78,7 +101,7 @@ const Footer: React.FC = () => {
                   href="#services"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  Work Visa Processing
+                  {t("footer.service2", "Work Visa Processing")}
                 </a>
               </li>
               <li>
@@ -86,7 +109,7 @@ const Footer: React.FC = () => {
                   href="#services"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  KITAS Creation
+                  {t("footer.service3", "KITAS Creation")}
                 </a>
               </li>
               <li>
@@ -94,7 +117,7 @@ const Footer: React.FC = () => {
                   href="#services"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  SKTT & Domicile Reporting
+                  {t("footer.service4", "SKTT & Domicile Reporting")}
                 </a>
               </li>
               <li>
@@ -102,29 +125,23 @@ const Footer: React.FC = () => {
                   href="#services"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  Document Consultation
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-accent transition-colors"
-                >
-                  Company Sponsorship
+                  {t("footer.service5", "Family KITAS")}
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6">Quick Links</h3>
+            <h3 className="font-heading font-bold text-lg mb-6">
+              {t("footer.quickLinks", "Quick Links")}
+            </h3>
             <ul className="space-y-3">
               <li>
                 <a
                   href="#home"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  Home
+                  {t("nav.home", "Home")}
                 </a>
               </li>
               <li>
@@ -132,15 +149,23 @@ const Footer: React.FC = () => {
                   href="#about"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  About Us
+                  {t("nav.about", "About Us")}
                 </a>
               </li>
               <li>
                 <a
-                  href="#testimonials"
+                  href="#services"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  Testimonials
+                  {t("nav.services", "Services")}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#process"
+                  className="text-gray-400 hover:text-accent transition-colors"
+                >
+                  {t("nav.process", "Process")}
                 </a>
               </li>
               <li>
@@ -148,80 +173,57 @@ const Footer: React.FC = () => {
                   href="#contact"
                   className="text-gray-400 hover:text-accent transition-colors"
                 >
-                  Contact
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-accent transition-colors"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-accent transition-colors"
-                >
-                  Terms of Service
+                  {t("nav.contact", "Contact")}
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-bold text-lg mb-6">Newsletter</h3>
-            <p className="text-gray-400 mb-4">
-              Subscribe to our newsletter for updates on immigration regulations
-              and services.
-            </p>
-            <form className="mb-4">
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md focus:outline-none focus:ring-1 focus:ring-accent"
-                />
-                <button
-                  type="submit"
-                  className="bg-accent px-4 py-2 rounded-r-md text-white font-medium hover:bg-accent/90 transition-colors"
-                >
-                  Subscribe
-                </button>
-              </div>
-            </form>
-            <p className="text-gray-500 text-sm">
-              By subscribing, you agree to our Privacy Policy and consent to
-              receive updates from our company.
-            </p>
+            <h3 className="font-heading font-bold text-lg mb-6">
+              {t("footer.contactUs", "Contact Us")}
+            </h3>
+            <ul className="space-y-4">
+              {settings?.company_address && (
+                <li className="flex items-start">
+                  <MapPin className="w-5 h-5 text-accent-light mt-1 mr-3" />
+                  <span className="text-gray-400">
+                    {settings.company_address}
+                  </span>
+                </li>
+              )}
+              {settings?.company_email && (
+                <li className="flex items-center">
+                  <Mail className="w-5 h-5 text-accent-light mr-3" />
+                  <a
+                    href={`mailto:${settings.company_email}`}
+                    className="text-gray-400 hover:text-accent transition-colors"
+                  >
+                    {settings.company_email}
+                  </a>
+                </li>
+              )}
+              {settings?.company_phone && (
+                <li className="flex items-center">
+                  <Phone className="w-5 h-5 text-accent-light mr-3" />
+                  <a
+                    href={`tel:${settings.company_phone}`}
+                    className="text-gray-400 hover:text-accent transition-colors"
+                  >
+                    {settings.company_phone}
+                  </a>
+                </li>
+              )}
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} HBM Jakarta. All rights reserved.
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+          <p>
+            &copy; {new Date().getFullYear()}{" "}
+            {settings?.company_name || "HBM Jakarta"}.{" "}
+            {t("footer.rights", "All rights reserved.")}
           </p>
-          <div className="flex space-x-6">
-            <a
-              href="#"
-              className="text-gray-500 hover:text-accent transition-colors text-sm"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="text-gray-500 hover:text-accent transition-colors text-sm"
-            >
-              Terms of Service
-            </a>
-            <a
-              href="#"
-              className="text-gray-500 hover:text-accent transition-colors text-sm"
-            >
-              Cookie Policy
-            </a>
-          </div>
         </div>
       </div>
     </footer>

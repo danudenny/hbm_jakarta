@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES, getAvailableLanguages } from "../lib/i18n";
+import useSiteSettings from "../hooks/useSiteSettings";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ const Navbar: React.FC = () => {
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation("common");
+  const { settings } = useSiteSettings();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,7 +94,15 @@ const Navbar: React.FC = () => {
                 scrolled ? "text-primary" : "text-white"
               }`}
             >
-              HBM
+              {settings?.company_logo ? (
+                <img 
+                  src={settings.company_logo} 
+                  alt={settings.company_name || "Company Logo"} 
+                  className="h-10 w-auto object-contain"
+                />
+              ) : (
+                settings?.company_name || "HBM"
+              )}
             </Link>
           </div>
 
@@ -189,7 +199,20 @@ const Navbar: React.FC = () => {
         <div className="h-full flex flex-col">
           <div className="px-4 py-6 border-b">
             <div className="flex justify-between items-center">
-              <span className="text-2xl font-bold text-primary">HBM</span>
+              <Link
+                to="/"
+                className="text-primary text-2xl font-bold"
+              >
+                {settings?.company_logo ? (
+                  <img 
+                    src={settings.company_logo} 
+                    alt={settings.company_name || "Company Logo"} 
+                    className="h-10 w-auto object-contain"
+                  />
+                ) : (
+                  settings?.company_name || "HBM"
+                )}
+              </Link>
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-2 rounded-md text-primary"
