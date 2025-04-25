@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Apply font families globally */
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  /* Apply Space Grotesk to all headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  
+  /* Base typography styles */
+  body {
+    @apply font-body text-gray-800;
+  }
+  
+  /* RTL language support */
+  html[dir="rtl"] {
+    text-align: right;
+  }
+}
+
+/* Custom utility classes for typography */
+@layer utilities {
+  .font-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+  
+  .font-body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}

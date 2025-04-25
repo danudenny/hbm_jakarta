@@ -6,6 +6,8 @@ export default {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+        heading: ['"Space Grotesk"', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
       },
       colors: {
         primary: {

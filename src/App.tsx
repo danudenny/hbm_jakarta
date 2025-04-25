@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import SEO from "./components/SEO";
 import HBMLoadingSpinner from "./components/LoadingSpinner";
 import { AuthProvider } from "./lib/AuthContext";
+import ContentSyncProvider from "./components/ContentSyncProvider";
 import "./styles/globals.css";
 import "./styles/rtl.css"; // Import RTL support styles
 import { useTranslation } from "react-i18next";
@@ -281,13 +282,15 @@ function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
-        <Router>
-          {isLoading && <HBMLoadingSpinner onLoadComplete={() => setIsLoading(false)} />}
-          <Toaster position="top-right" />
-          <div className="min-h-screen">
-            <AppContent />
-          </div>
-        </Router>
+        <ContentSyncProvider>
+          <Router>
+            {isLoading && <HBMLoadingSpinner onLoadComplete={() => setIsLoading(false)} />}
+            <Toaster position="top-right" />
+            <div className="min-h-screen">
+              <AppContent />
+            </div>
+          </Router>
+        </ContentSyncProvider>
       </AuthProvider>
     </HelmetProvider>
   );
