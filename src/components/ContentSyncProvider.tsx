@@ -1,20 +1,18 @@
 import React, { ReactNode } from 'react';
-import useContentSync from '../hooks/useContentSync';
 
 interface ContentSyncProviderProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 /**
- * Provider component that sets up automatic synchronization between 
- * landing section content in the database and translations
+ * Provider component for content - no longer syncs with database
+ * Now simply loads translations from local JSON files
  */
-const ContentSyncProvider: React.FC<ContentSyncProviderProps> = ({ children }) => {
-  // Use the content sync hook to listen for changes
-  useContentSync();
-  
-  // Simply render the children, the hook handles the sync logic
-  return <>{children}</>;
+const ContentSyncProvider: React.FC<ContentSyncProviderProps> = ({
+    children,
+}) => {
+    // Simply render the children, no sync logic needed
+    return <>{children}</>;
 };
 
 export default ContentSyncProvider;

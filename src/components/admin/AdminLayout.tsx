@@ -96,6 +96,7 @@ const AdminLayout = () => {
         { path: "/admin/sections/faqs", label: "FAQ Section" },
         { path: "/admin/sections/contact", label: "Contact Section" },
         { path: "/admin/sections/floating-social", label: "Floating Social" },
+        { path: "/admin/landing-sections-data-export", label: "Export Data" },
       ],
     },
     { id: "seo", path: "/admin/seo", label: "SEO Settings", icon: Globe },

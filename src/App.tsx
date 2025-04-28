@@ -72,6 +72,9 @@ const SettingsPage = lazy(() => import("./components/admin/SettingsPage"));
 const TranslationsManager = lazy(
   () => import("./components/admin/TranslationsManager")
 );
+const LandingSectionsDataExport = lazy(
+  () => import("./components/admin/LandingSectionsDataExport")
+);
 
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
@@ -257,6 +260,14 @@ const AppContent = () => {
             </Suspense>
           }
         />
+        <Route
+          path="landing-sections-data-export"
+          element={
+            <Suspense fallback={<LoadingSpinner />}>
+              <LandingSectionsDataExport />
+            </Suspense>
+          }
+        />
       </Route>
 
       {/* Main Landing Page */}
@@ -291,9 +302,6 @@ const AppContent = () => {
               <Suspense fallback={<LoadingSpinner />}>
                 <TestimonialsSection />
               </Suspense>
-              {/* <Suspense fallback={<LoadingSpinner />}>
-                <FAQSection />
-              </Suspense> */}
               <Suspense fallback={<LoadingSpinner />}>
                 <ContactSection />
               </Suspense>

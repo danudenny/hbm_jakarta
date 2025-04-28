@@ -1,0 +1,30 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "testimonials": "Testimonials",
+    "contact_us": "Contact Us",
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "admin_panel": "Admin Panel",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "footer": {
+    "company_description": "We provide innovative solutions for businesses of all sizes.",
+    "quick_links": "Quick Links",
+    "social_media": "Social Media",
+    "contact_info": "Contact Information",
+    "copyright": " 2025 Your Company. All rights reserved.",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service"
+  },
+  "social": {
+    "follow_us": "Follow Us",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn"
+  }
+}

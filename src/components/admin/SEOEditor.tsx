@@ -116,12 +116,24 @@ const SEOEditor = () => {
     try {
       const { id, ...dataToSave } = seoSettings;
 
-      if (id) {
+      // First check if a record already exists for this page path
+      const { data: existingData, error: checkError } = await supabase
+        .from("seo_settings")
+        .select("id")
+        .eq("page_path", seoSettings.page_path)
+        .single();
+
+      if (checkError && checkError.code !== "PGRST116") {
+        throw checkError;
+      }
+
+      if (id || existingData) {
         // Update existing record
+        const recordId = id || existingData?.id;
         const { error } = await supabase
           .from("seo_settings")
           .update(dataToSave)
-          .eq("id", id);
+          .eq("id", recordId);
 
         if (error) throw error;
       } else {
@@ -134,6 +146,9 @@ const SEOEditor = () => {
       }
 
       toast.success("SEO settings saved successfully");
+      
+      // Refresh the data to ensure we have the latest
+      fetchSEOSettings(seoSettings.page_path);
     } catch (error: any) {
       toast.error(`Error saving SEO settings: ${error.message}`);
     } finally {

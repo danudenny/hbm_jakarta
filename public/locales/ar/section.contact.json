@@ -1,0 +1,15 @@
+{
+  "title": "Contact Us",
+  "subtitle": "Get in Touch",
+  "description": "We'd love to hear from you. Reach out to us with any questions or inquiries.",
+  "form": {
+    "name": "Your Name",
+    "email": "Your Email",
+    "phone": "Phone Number",
+    "message": "Your Message",
+    "submit": "Send Message"
+  },
+  "address": "Address",
+  "phone": "Phone",
+  "email": "Email"
+}

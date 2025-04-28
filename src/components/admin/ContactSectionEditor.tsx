@@ -1,468 +1,310 @@
-import React, { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
-import toast from "react-hot-toast";
+import { Loader2, Save } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import {
-  Save,
-  ArrowLeft,
-  User,
-  Phone,
-  Share2,
-  MessageSquare,
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import TabComponent from "./common/TabComponent";
-import GeneralTab from "./contact/GeneralTab";
-import ContactInfoTab from "./contact/ContactInfoTab";
-import SocialLinksTab from "./contact/SocialLinksTab";
-import FormSettingsTab from "./contact/FormSettingsTab";
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from '../../components/ui/Tabs';
+import { supabase } from '../../lib/supabase';
+import ContactInfoTab from './contact/ContactInfoTab';
+import GeneralTab from './contact/GeneralTab';
+import MapLocationsTab from './contact/MapLocationsTab';
 
 type SocialLink = {
-  id: string;
-  platform: string;
-  url: string;
-  iconName: string;
+    id: string;
+    platform: string;
+    url: string;
+    iconName: string;
 };
 
-type ContactInfo = {
-  address: string;
-  phone: string[];
-  email: string[];
-  business_hours: string[];
+type MapLocation = {
+    id: number;
+    name: string;
+    address: string;
+    lat: number;
+    lng: number;
 };
 
-type ContactSectionData = {
-  title: string;
-  subtitle: string;
-  content: {
-    description: string;
-    contact_info: ContactInfo;
-    social_links: SocialLink[];
-    form_title: string;
-  };
-  is_active: boolean;
-};
+type ContactSectionEditorProps = null;
 
-const ContactSectionEditor = () => {
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("general");
-  const [formData, setFormData] = useState<ContactSectionData>({
-    title: "",
-    subtitle: "",
-    content: {
-      description: "",
-      contact_info: {
-        address: "",
-        phone: [""],
-        email: [""],
-        business_hours: [""],
-      },
-      social_links: [],
-      form_title: "",
-    },
-    is_active: true,
-  });
-
-  useEffect(() => {
-    fetchContactSection();
-  }, []);
-
-  const fetchContactSection = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from("landing_sections")
-        .select("*")
-        .eq("name", "contact")
-        .single();
-
-      if (error) {
-        if (error.code === "PGRST116") {
-          // No data found, create a new section
-          await createDefaultSection();
-          return;
-        }
-        throw error;
-      }
-
-      setFormData({
-        title: data.title || "",
-        subtitle: data.subtitle || "",
-        content: {
-          description: data.content?.description || "",
-          contact_info: data.content?.contact_info || {
-            address: "",
-            phone: [""],
-            email: [""],
-            business_hours: [""],
-          },
-          social_links: data.content?.social_links || [],
-          form_title: data.content?.form_title || "",
-        },
-        is_active: data.is_active,
-      });
-    } catch (error: any) {
-      toast.error(`Error loading contact section: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const createDefaultSection = async () => {
-    try {
-      const defaultSection = {
-        name: "contact",
-        title: "Get in Touch with Our Experts",
-        subtitle: "CONTACT US",
-        content: {
-          description:
-            "Have questions about visa requirements or need assistance with your documentation? Our team is ready to help you navigate the process smoothly.",
-          contact_info: {
-            address:
-              "Jl. Sudirman Kav. 52-53, Jakarta Selatan, 12190, Indonesia",
-            phone: ["+62 21 123 4567", "+62 812 3456 7890 (WhatsApp)"],
-            email: [
-              "info@HBM Jakarta-indonesia.com",
-              "support@HBM Jakarta-indonesia.com",
-            ],
-            business_hours: [
-              "Monday - Friday: 9:00 AM - 5:00 PM",
-              "Saturday: 9:00 AM - 1:00 PM",
-            ],
-          },
-          social_links: [
-            {
-              id: "1",
-              platform: "Facebook",
-              url: "#",
-              iconName: "Facebook",
-            },
-            {
-              id: "2",
-              platform: "Instagram",
-              url: "#",
-              iconName: "Instagram",
-            },
-            {
-              id: "3",
-              platform: "Twitter",
-              url: "#",
-              iconName: "Twitter",
-            },
-            {
-              id: "4",
-              platform: "YouTube",
-              url: "#",
-              iconName: "Youtube",
-            },
-          ],
-          form_title: "Request a Consultation",
-        },
-        is_active: true,
-      };
-
-      const { data, error } = await supabase
-        .from("landing_sections")
-        .insert(defaultSection)
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      setFormData({
-        title: data.title,
-        subtitle: data.subtitle,
-        content: data.content,
-        is_active: data.is_active,
-      });
-
-      toast.success("Created default contact section");
-    } catch (error: any) {
-      toast.error(`Error creating default section: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleContentChange = (field: string, value: string) => {
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        [field]: value,
-      },
-    });
-  };
-
-  const handleContactInfoChange = (field: string, value: string) => {
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        contact_info: {
-          ...formData.content.contact_info,
-          [field]: value,
-        },
-      },
-    });
-  };
-
-  const handleContactArrayChange = (
-    field: string,
-    index: number,
-    value: string
-  ) => {
-    const newArray = [
-      ...(formData.content.contact_info[
-        field as keyof ContactInfo
-      ] as string[]),
-    ];
-    newArray[index] = value;
-
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        contact_info: {
-          ...formData.content.contact_info,
-          [field]: newArray,
-        },
-      },
-    });
-  };
-
-  const handleAddContactArrayItem = (field: string) => {
-    const newArray = [
-      ...(formData.content.contact_info[
-        field as keyof ContactInfo
-      ] as string[]),
-      "",
-    ];
-
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        contact_info: {
-          ...formData.content.contact_info,
-          [field]: newArray,
-        },
-      },
-    });
-  };
-
-  const handleRemoveContactArrayItem = (field: string, index: number) => {
-    const newArray = [
-      ...(formData.content.contact_info[
-        field as keyof ContactInfo
-      ] as string[]),
-    ];
-    newArray.splice(index, 1);
-
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        contact_info: {
-          ...formData.content.contact_info,
-          [field]: newArray,
-        },
-      },
-    });
-  };
-
-  const handleSocialLinkChange = (id: string, field: string, value: string) => {
-    const updatedLinks = formData.content.social_links.map((link) =>
-      link.id === id ? { ...link, [field]: value } : link
+const ContactSectionEditor: React.FC<ContactSectionEditorProps> = () => {
+    // General section fields
+    const [title, setTitle] = useState('Get in Touch');
+    const [subtitle, setSubtitle] = useState('CONTACT');
+    const [description, setDescription] = useState(
+        'Have questions about our services? Contact us and we will get back to you as soon as possible.'
     );
+    const [isActive, setIsActive] = useState(true);
 
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        social_links: updatedLinks,
-      },
+    // Contact form settings
+    const [formTitle, setFormTitle] = useState('Send Us a Message');
+
+    // Contact info arrays
+    const [contactInfo, setContactInfo] = useState({
+        address: [''],
+        phone: [''],
+        email: [''],
+        business_hours: [''],
     });
-  };
 
-  const handleAddSocialLink = () => {
-    const newLink: SocialLink = {
-      id: Date.now().toString(),
-      platform: "",
-      url: "",
-      iconName: "",
+    // Map locations
+    const [mapLocations, setMapLocations] = useState<MapLocation[]>([
+        {
+            id: 1,
+            name: 'Jakarta Office',
+            address:
+                'Jl. Sudirman Kav. 52-53, Jakarta Selatan, 12190, Indonesia',
+            lat: -6.3003633,
+            lng: 106.7949649,
+        },
+        {
+            id: 2,
+            name: 'Medan Office',
+            address: 'Jl. Gatot Subroto No. 123, Medan, Indonesia',
+            lat: 3.5218576,
+            lng: 98.6235427,
+        },
+    ]);
+
+    // Editor state
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetchContactData();
+    }, []);
+
+    const fetchContactData = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('landing_sections')
+                .select('*')
+                .eq('name', 'contact')
+                .single();
+
+            if (error) throw error;
+
+            if (data) {
+                // Set general section data
+                setTitle(data.title || title);
+                setSubtitle(data.subtitle || subtitle);
+                setDescription(data.content?.description || description);
+                setIsActive(data.is_active);
+
+                // Set contact info arrays with default empty values if not present
+                if (data.content?.contact_info) {
+                    const contactInfoData = data.content.contact_info;
+                    setContactInfo({
+                        address: Array.isArray(contactInfoData.address)
+                            ? contactInfoData.address
+                            : [contactInfoData.address || ''],
+                        phone: Array.isArray(contactInfoData.phone)
+                            ? contactInfoData.phone
+                            : [contactInfoData.phone || ''],
+                        email: Array.isArray(contactInfoData.email)
+                            ? contactInfoData.email
+                            : [contactInfoData.email || ''],
+                        business_hours: Array.isArray(
+                            contactInfoData.business_hours
+                        )
+                            ? contactInfoData.business_hours
+                            : [
+                                  contactInfoData.business_hours?.weekdays ||
+                                      '',
+                                  contactInfoData.business_hours?.weekends ||
+                                      '',
+                              ].filter(Boolean),
+                    });
+                }
+
+                // Set map locations if available
+                if (
+                    data.content?.map_locations &&
+                    Array.isArray(data.content.map_locations)
+                ) {
+                    setMapLocations(data.content.map_locations);
+                }
+
+                // Set form settings
+                if (data.content?.form) {
+                    setFormTitle(data.content.form.title || formTitle);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching contact section data:', error);
+        }
     };
 
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        social_links: [...formData.content.social_links, newLink],
-      },
-    });
-  };
+    const handleContactArrayChange = (
+        field: string,
+        index: number,
+        value: string
+    ) => {
+        setContactInfo((prev) => ({
+            ...prev,
+            [field]: prev[field].map((item: string, i: number) =>
+                i === index ? value : item
+            ),
+        }));
+    };
 
-  const handleRemoveSocialLink = (id: string) => {
-    const updatedLinks = formData.content.social_links.filter(
-      (link) => link.id !== id
-    );
+    const handleAddContactArrayItem = (field: string) => {
+        setContactInfo((prev) => ({
+            ...prev,
+            [field]: [...prev[field], ''],
+        }));
+    };
 
-    setFormData({
-      ...formData,
-      content: {
-        ...formData.content,
-        social_links: updatedLinks,
-      },
-    });
-  };
+    const handleRemoveContactArrayItem = (field: string, index: number) => {
+        setContactInfo((prev) => ({
+            ...prev,
+            [field]: prev[field].filter((_: string, i: number) => i !== index),
+        }));
+    };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
+    // Map location handlers
+    const handleAddLocation = (location: MapLocation) => {
+        setMapLocations((prev) => [...prev, location]);
+    };
 
-    try {
-      const { error } = await supabase
-        .from("landing_sections")
-        .update({
-          title: formData.title,
-          subtitle: formData.subtitle,
-          content: formData.content,
-          is_active: formData.is_active,
-        })
-        .eq("name", "contact");
+    const handleUpdateLocation = (updatedLocation: MapLocation) => {
+        setMapLocations((prev) =>
+            prev.map((location) =>
+                location.id === updatedLocation.id ? updatedLocation : location
+            )
+        );
+    };
 
-      if (error) throw error;
+    const handleRemoveLocation = (id: number) => {
+        setMapLocations((prev) =>
+            prev.filter((location) => location.id !== id)
+        );
+    };
 
-      toast.success("Contact section updated successfully");
-    } catch (error: any) {
-      toast.error(`Error saving section: ${error.message}`);
-    } finally {
-      setSaving(false);
-    }
-  };
+    const saveContactSection = async () => {
+        setIsSaving(true);
+        setSaveSuccess(false);
+        setSaveError(null);
 
-  const tabs = [
-    { id: "general", label: "General", icon: <User size={16} /> },
-    { id: "contact-info", label: "Contact Info", icon: <Phone size={16} /> },
-    { id: "social-links", label: "Social Links", icon: <Share2 size={16} /> },
-    {
-      id: "form-settings",
-      label: "Form Settings",
-      icon: <MessageSquare size={16} />,
-    },
-  ];
+        try {
+            // Format the contact data into the structure expected by the database
+            const contactData = {
+                name: 'contact',
+                title,
+                subtitle,
+                content: {
+                    description,
+                    contact_info: {
+                        address: contactInfo.address,
+                        phone: contactInfo.phone,
+                        email: contactInfo.email,
+                        business_hours: contactInfo.business_hours,
+                    },
+                    map_locations: mapLocations,
+                    form: {
+                        title: formTitle,
+                    },
+                },
+                is_active: isActive,
+            };
 
-  if (loading) {
+            const { error } = await supabase
+                .from('landing_sections')
+                .upsert(contactData, { onConflict: 'name' });
+
+            if (error) throw error;
+
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
+        } catch (error) {
+            console.error('Error saving contact section:', error);
+            setSaveError((error as Error).message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
+        <div className="overflow-hidden bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h2 className="text-lg font-medium">
+                    Contact Section Settings
+                </h2>
+                <button
+                    onClick={saveContactSection}
+                    disabled={isSaving}
+                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+                >
+                    {isSaving ? (
+                        <>
+                            <Loader2 size={16} className="mr-2 animate-spin" />
+                            Saving...
+                        </>
+                    ) : (
+                        <>
+                            <Save size={16} className="mr-2" />
+                            Save Changes
+                        </>
+                    )}
+                </button>
+            </div>
+
+            {saveSuccess && (
+                <div className="p-3 m-4 text-green-800 rounded-md bg-green-50">
+                    Contact section saved successfully!
+                </div>
+            )}
+
+            {saveError && (
+                <div className="p-3 m-4 text-red-800 rounded-md bg-red-50">
+                    Error: {saveError}
+                </div>
+            )}
+
+            <Tabs defaultValue="general" className="p-4">
+                <TabsList className="mb-4">
+                    <TabsTrigger value="general">General</TabsTrigger>
+                    <TabsTrigger value="contact-info">Contact Info</TabsTrigger>
+                    <TabsTrigger value="map-locations">
+                        Map Locations
+                    </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="general">
+                    <GeneralTab
+                        title={title}
+                        subtitle={subtitle}
+                        description={description}
+                        isActive={isActive}
+                        onTitleChange={setTitle}
+                        onSubtitleChange={setSubtitle}
+                        onDescriptionChange={setDescription}
+                        onActiveChange={setIsActive}
+                    />
+                </TabsContent>
+
+                <TabsContent value="contact-info">
+                    <ContactInfoTab
+                        contactInfo={contactInfo}
+                        onContactArrayChange={handleContactArrayChange}
+                        onAddContactArrayItem={handleAddContactArrayItem}
+                        onRemoveContactArrayItem={handleRemoveContactArrayItem}
+                    />
+                </TabsContent>
+
+                <TabsContent value="map-locations">
+                    <MapLocationsTab
+                        locations={mapLocations}
+                        onAddLocation={handleAddLocation}
+                        onUpdateLocation={handleUpdateLocation}
+                        onRemoveLocation={handleRemoveLocation}
+                    />
+                </TabsContent>
+            </Tabs>
+        </div>
     );
-  }
-
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <Link to="/admin" className="mr-4 p-2 rounded-full hover:bg-gray-200">
-            <ArrowLeft size={20} />
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-800">
-            Edit Contact Section
-          </h1>
-        </div>
-        <button
-          onClick={handleSubmit}
-          disabled={saving}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
-        >
-          {saving ? (
-            <>
-              <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save size={16} className="mr-2" />
-              Save Changes
-            </>
-          )}
-        </button>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <TabComponent
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          className="px-6 pt-4"
-        />
-
-        <div className="p-6">
-          {activeTab === "general" && (
-            <GeneralTab
-              title={formData.title}
-              subtitle={formData.subtitle}
-              description={formData.content.description}
-              isActive={formData.is_active}
-              onTitleChange={(value) =>
-                setFormData({ ...formData, title: value })
-              }
-              onSubtitleChange={(value) =>
-                setFormData({ ...formData, subtitle: value })
-              }
-              onDescriptionChange={(value) =>
-                handleContentChange("description", value)
-              }
-              onActiveChange={(value) =>
-                setFormData({ ...formData, is_active: value })
-              }
-            />
-          )}
-
-          {activeTab === "contact-info" && (
-            <ContactInfoTab
-              contactInfo={formData.content.contact_info}
-              onAddressChange={(value) =>
-                handleContactInfoChange("address", value)
-              }
-              onContactArrayChange={handleContactArrayChange}
-              onAddContactArrayItem={handleAddContactArrayItem}
-              onRemoveContactArrayItem={handleRemoveContactArrayItem}
-            />
-          )}
-
-          {activeTab === "social-links" && (
-            <SocialLinksTab
-              socialLinks={formData.content.social_links}
-              onSocialLinkChange={handleSocialLinkChange}
-              onAddSocialLink={handleAddSocialLink}
-              onRemoveSocialLink={handleRemoveSocialLink}
-            />
-          )}
-
-          {activeTab === "form-settings" && (
-            <FormSettingsTab
-              formTitle={formData.content.form_title}
-              onFormTitleChange={(value) =>
-                handleContentChange("form_title", value)
-              }
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  );
 };
 
 export default ContactSectionEditor;
