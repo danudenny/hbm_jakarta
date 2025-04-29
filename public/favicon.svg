@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <!-- Blue gradient background with rounded corners -->
-  <defs>
-    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#60a5fa" />
-      <stop offset="100%" stop-color="#3b82f6" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Rounded square background -->
-  <rect width="512" height="512" rx="100" ry="100" fill="url(#bg-gradient)" />
-  
-  <!-- Letter H with better positioning and styling -->
-  <path 
-    d="M168 128v256h48V288h80v96h48V128h-48v112h-80V128z" 
-    fill="white"
-    stroke="rgba(255,255,255,0.2)"
-    stroke-width="8" />
-  
-  <!-- Subtle shadow effect -->
-  <rect width="512" height="512" rx="100" ry="100" fill="url(#bg-gradient)" opacity="0.05" filter="blur(20px)" />
+	<!-- Blue gradient background with rounded corners -->
+	<defs>
+		<linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+			<stop offset="0%" stop-color="#60a5fa" />
+			<stop offset="100%" stop-color="#3b82f6" />
+		</linearGradient>
+	</defs>
+	<!-- Rounded square background -->
+	<rect width="512" height="512" rx="100" ry="100" fill="url(#bg-gradient)" />
+	<!-- Letter H with better positioning and styling -->
+	<path d="M168 128v256h48V288h80v96h48V128h-48v112h-80V128z" fill="white" stroke="rgba(255,255,255,0.2)" stroke-width="8" />
+	<!-- Subtle shadow effect -->
+	<rect width="512" height="512" rx="100" ry="100" fill="url(#bg-gradient)" opacity="0.05" filter="blur(20px)" />
 </svg>
