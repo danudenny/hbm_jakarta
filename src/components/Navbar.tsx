@@ -39,6 +39,16 @@ const Navbar: React.FC = () => {
         fetchAvailableLanguages();
     }, []);
 
+    // Add debugging for settings object
+    useEffect(() => {
+        if (settings) {
+            console.log('Navbar - settings loaded:', settings);
+            console.log('Navbar - logo URL:', settings.company_logo);
+        } else {
+            console.log('Navbar - settings not loaded yet');
+        }
+    }, [settings]);
+
     const handleLanguageChange = (language: string) => {
         i18n.changeLanguage(language);
         setLanguageMenuOpen(false);
@@ -105,8 +115,20 @@ const Navbar: React.FC = () => {
                                 <div className="flex items-center">
                                     <img
                                         src={settings.company_logo}
-                                        alt={t('company_logo_alt', 'Company Logo')}
+                                        alt={t(
+                                            'company_logo_alt',
+                                            'Company Logo'
+                                        )}
                                         className="object-contain w-auto h-10 mr-3"
+                                        onError={(e) => {
+                                            console.error(
+                                                'Error loading logo:',
+                                                e
+                                            );
+                                            // Set fallback text when image fails to load
+                                            e.currentTarget.style.display =
+                                                'none';
+                                        }}
                                     />
                                     <span
                                         className={`font-heading text-xl tracking-wide ${
@@ -115,12 +137,20 @@ const Navbar: React.FC = () => {
                                                 : 'text-white'
                                         }`}
                                     >
-                                        {t('company_name', 'Hasmar Bumi Mandiri')}
+                                        {t(
+                                            'company_name',
+                                            settings?.company_name ||
+                                                'Hasmar Bumi Mandiri'
+                                        )}
                                     </span>
                                 </div>
                             ) : (
                                 <span className="tracking-wide font-heading">
-                                    {t('company_name', 'Hasmar Bumi Mandiri')}
+                                    {t(
+                                        'company_name',
+                                        settings?.company_name ||
+                                            'Hasmar Bumi Mandiri'
+                                    )}
                                 </span>
                             )}
                         </Link>
@@ -173,7 +203,10 @@ const Navbar: React.FC = () => {
                                         ? 'text-primary bg-gray-100'
                                         : 'text-white bg-white/10'
                                 }`}
-                                aria-label={t('change_language', 'Change language')}
+                                aria-label={t(
+                                    'change_language',
+                                    'Change language'
+                                )}
                             >
                                 <Globe size={18} />
                                 <span className="ml-1 text-sm">
@@ -207,57 +240,13 @@ const Navbar: React.FC = () => {
                                 </div>
                             )}
                         </div>
-
-                        {user ? (
-                            <div className="relative group">
-                                <button
-                                    className={`flex items-center space-x-1 font-medium ${
-                                        scrolled
-                                            ? 'text-gray-800'
-                                            : 'text-white'
-                                    }`}
-                                >
-                                    <span>{user.email?.split('@')[0]}</span>
-                                    <ChevronDown size={14} />
-                                </button>
-                                <div className="absolute right-0 z-50 invisible w-48 py-1 mt-2 bg-white rounded-md shadow-lg opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
-                                    {isAdmin && (
-                                        <Link
-                                            to="/admin"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            {t('nav.admin_panel', 'Admin Panel')}
-                                        </Link>
-                                    )}
-                                    <Link
-                                        to="/dashboard"
-                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
-                                        {t('nav.dashboard', 'Dashboard')}
-                                    </Link>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
-                                    >
-                                        {t('nav.logout', 'Logout')}
-                                    </button>
-                                </div>
-                            </div>
-                        ) : (
-                            <Link
-                                to="/login"
-                                className={`font-medium hover:text-accent transition-colors ${
-                                    scrolled ? 'text-gray-800' : 'text-white'
-                                }`}
-                            >
-                                {t('nav.login', 'Login')}
-                            </Link>
-                        )}
                     </div>
 
                     <div className="flex md:hidden">
                         <button
-                            onClick={() => setLanguageMenuOpen(!languageMenuOpen)}
+                            onClick={() =>
+                                setLanguageMenuOpen(!languageMenuOpen)
+                            }
                             className={`p-2 mr-2 rounded-full ${
                                 scrolled
                                     ? 'text-primary bg-gray-100'
@@ -273,13 +262,13 @@ const Navbar: React.FC = () => {
                             className={`p-2 rounded-md ${
                                 scrolled ? 'text-gray-800' : 'text-white'
                             }`}
-                            aria-label={isOpen ? t('close_menu', 'Close menu') : t('open_menu', 'Open menu')}
+                            aria-label={
+                                isOpen
+                                    ? t('close_menu', 'Close menu')
+                                    : t('open_menu', 'Open menu')
+                            }
                         >
-                            {isOpen ? (
-                                <X size={24} />
-                            ) : (
-                                <Menu size={24} />
-                            )}
+                            {isOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
                     </div>
                 </div>
@@ -287,7 +276,7 @@ const Navbar: React.FC = () => {
 
             {/* Mobile menu */}
             {isOpen && (
-                <div className="px-4 py-3 md:hidden bg-white">
+                <div className="px-4 py-3 bg-white md:hidden">
                     <div className="flex flex-col space-y-3">
                         <a
                             href="#home"

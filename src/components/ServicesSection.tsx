@@ -1,202 +1,237 @@
-import { useState, useEffect } from "react";
-import ServiceCard from "./ServiceCard";
-import { supabase } from "../lib/supabase";
-import { useTranslation } from "react-i18next";
 import {
-  FileText,
-  Plane,
-  CreditCard,
-  MapPin,
-  FileCheck,
-  Users,
-  HelpCircle,
-} from "lucide-react";
+    ArrowRight,
+    CreditCard,
+    FileCheck,
+    FileText,
+    HelpCircle,
+    MapPin,
+    Plane,
+    Users,
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { supabase } from '../lib/supabase';
 
 type ServiceItem = {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
+    id: string;
+    icon: string;
+    title: string;
+    description: string;
 };
 
 type ServicesSectionData = {
-  title: string;
-  subtitle: string;
-  content: {
-    description: string;
-    cta_text: string;
-    cta_link: string;
-    note: string;
-    services: ServiceItem[];
-  };
-  is_active: boolean;
+    title: string;
+    subtitle: string;
+    content: {
+        description: string;
+        cta_text: string;
+        cta_link: string;
+        note: string;
+        services: ServiceItem[];
+    };
+    is_active: boolean;
 };
 
 // Map of icon names to components
 const iconMap = {
-  FileText,
-  Plane,
-  CreditCard,
-  MapPin,
-  FileCheck,
-  Users,
-  HelpCircle,
+    FileText,
+    Plane,
+    CreditCard,
+    MapPin,
+    FileCheck,
+    Users,
+    HelpCircle,
 };
 
 const ServicesSection = () => {
-  const [loading, setLoading] = useState(true);
-  const [servicesData, setServicesData] = useState<ServicesSectionData | null>(
-    null
-  );
-  const [serviceItems, setServiceItems] = useState<ServiceItem[]>([]);
-  const { t, i18n } = useTranslation('section.services');
-  const isRTL = i18n.dir() === 'rtl';
+    const [loading, setLoading] = useState(true);
+    const [servicesData, setServicesData] =
+        useState<ServicesSectionData | null>(null);
+    const [serviceItems, setServiceItems] = useState<ServiceItem[]>([]);
+    const { t, i18n } = useTranslation('section.services');
+    const isRTL = i18n.dir() === 'rtl';
 
-  useEffect(() => {
-    const fetchServicesData = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("landing_sections")
-          .select("*")
-          .eq("name", "services")
-          .single();
+    useEffect(() => {
+        const fetchServicesData = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('landing_sections')
+                    .select('*')
+                    .eq('name', 'services')
+                    .single();
 
-        if (error) throw error;
+                if (error) throw error;
 
-        if (data && data.is_active) {
-          setServicesData(data);
-          setServiceItems(data.content.services || []);
-        } else {
-          console.warn("Services section is not active or not found");
-        }
-      } catch (err: any) {
-        console.error("Error fetching services section:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+                if (data && data.is_active) {
+                    setServicesData(data);
+                    setServiceItems(data.content.services || []);
+                } else {
+                    console.warn('Services section is not active or not found');
+                }
+            } catch (err) {
+                console.error('Error fetching services section:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    fetchServicesData();
-  }, []);
+        fetchServicesData();
+    }, []);
 
-  // Default service items as fallback
-  const defaultServiceItems = [
-    {
-      id: "1",
-      icon: "FileText",
-      title: "Document Processing",
-      description:
-        "Efficient document processing services for all your business needs.",
-    },
-    {
-      id: "2",
-      icon: "Plane",
-      title: "Travel Arrangements",
-      description:
-        "Comprehensive travel management for corporate and leisure trips.",
-    },
-    {
-      id: "3",
-      icon: "CreditCard",
-      title: "Payment Solutions",
-      description:
-        "Secure and flexible payment processing for businesses of all sizes.",
-    },
-    {
-      id: "4",
-      icon: "MapPin",
-      title: "Location Services",
-      description:
-        "Precise location tracking and mapping for your business operations.",
-    },
-    {
-      id: "5",
-      icon: "FileCheck",
-      title: "Compliance Management",
-      description:
-        "Stay compliant with regulations with our comprehensive solutions.",
-    },
-    {
-      id: "6",
-      icon: "Users",
-      title: "HR Management",
-      description:
-        "Complete human resources management for your organization.",
-    },
-  ];
+    // Default service items as fallback
+    const defaultServiceItems = [
+        {
+            id: '1',
+            icon: 'FileText',
+            title: 'Document Processing',
+            description:
+                'Efficient document processing services for all your business needs.',
+        },
+        {
+            id: '2',
+            icon: 'Plane',
+            title: 'Travel Arrangements',
+            description:
+                'Comprehensive travel management for corporate and leisure trips.',
+        },
+        {
+            id: '3',
+            icon: 'CreditCard',
+            title: 'Payment Solutions',
+            description:
+                'Secure and flexible payment processing for businesses of all sizes.',
+        },
+        {
+            id: '4',
+            icon: 'MapPin',
+            title: 'Location Services',
+            description:
+                'Precise location tracking and mapping for your business operations.',
+        },
+        {
+            id: '5',
+            icon: 'FileCheck',
+            title: 'Compliance Management',
+            description:
+                'Stay compliant with regulations with our comprehensive solutions.',
+        },
+        {
+            id: '6',
+            icon: 'Users',
+            title: 'HR Management',
+            description:
+                'Complete human resources management for your organization.',
+        },
+    ];
 
-  if (loading) {
+    if (loading) {
+        return (
+            <section className="py-16 bg-white">
+                <div className="container flex justify-center px-4 mx-auto md:px-6">
+                    <div className="w-8 h-8 border-t-2 border-b-2 rounded-full animate-spin border-primary"></div>
+                </div>
+            </section>
+        );
+    }
+
+    // If there's an error or no data, use default content
+    const services =
+        serviceItems.length > 0 ? serviceItems : defaultServiceItems;
+    const title = servicesData?.title || 'Our Services';
+    const subtitle = servicesData?.subtitle || 'What We Offer';
+    const description =
+        servicesData?.content.description ||
+        'We provide a range of services to help your business grow and succeed.';
+    const ctaText = servicesData?.content.cta_text || 'Learn More';
+    const ctaLink = servicesData?.content.cta_link || '#';
+    const note = servicesData?.content.note || '';
+
+    // If section is not active and we're not in development mode, don't render
+    if (!servicesData?.is_active && process.env.NODE_ENV !== 'development') {
+        return null;
+    }
+
     return (
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 md:px-6 flex justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
-        </div>
-      </section>
+        <section
+            id="services"
+            className={`py-16 bg-white ${isRTL ? 'rtl' : 'ltr'}`}
+        >
+            <div className="container px-4 mx-auto md:px-6">
+                <div className="mb-16 text-center">
+                    <div className="inline-flex items-center px-3 py-1 mb-3 rounded-full bg-primary/10">
+                        <span className="w-2 h-2 mr-2 rounded-full bg-primary"></span>
+                        <h5 className="text-sm font-medium tracking-wider uppercase text-primary">
+                            {t('subtitle', { defaultValue: subtitle })}
+                        </h5>
+                    </div>
+                    <h2 className="mb-4 text-3xl font-bold md:text-4xl">
+                        {t('title', { defaultValue: title })}
+                    </h2>
+                    <p className="max-w-3xl mx-auto text-gray-600">
+                        {t('description', { defaultValue: description })}
+                    </p>
+                </div>
+
+                {/* Improved grid layout for better proportions */}
+                <div className="grid max-w-6xl grid-cols-1 gap-6 mx-auto sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+                    {services.map((service, index) => {
+                        const IconComponent =
+                            iconMap[service.icon as keyof typeof iconMap] ||
+                            HelpCircle;
+                        return (
+                            <div
+                                key={service.id}
+                                className="flex flex-col h-full p-6 transition-all duration-300 bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md hover:border-primary/20 group"
+                                data-aos="fade-up"
+                                data-aos-delay={index * 100}
+                            >
+                                <div className="flex items-center justify-center w-12 h-12 mb-4 transition-all duration-300 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20">
+                                    <IconComponent size={24} />
+                                </div>
+                                <h3 className="mb-3 text-xl font-bold transition-colors duration-300 group-hover:text-primary">
+                                    {t(`services.${index}.title`, {
+                                        defaultValue: service.title,
+                                    })}
+                                </h3>
+                                <p className="flex-grow mb-4 text-gray-600">
+                                    {t(`services.${index}.description`, {
+                                        defaultValue: service.description,
+                                    })}
+                                </p>
+                                <a
+                                    href="#contact"
+                                    className="inline-flex items-center mt-auto text-sm font-medium text-primary group"
+                                >
+                                    <span className="transition-all duration-300 group-hover:mr-1">
+                                        Learn more
+                                    </span>
+                                    <ArrowRight
+                                        size={16}
+                                        className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                                    />
+                                </a>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {note && (
+                    <div className="mt-12 text-center">
+                        <p className="text-sm italic text-gray-500">{note}</p>
+                    </div>
+                )}
+
+                <div className="mt-12 text-center">
+                    <a
+                        href={ctaLink}
+                        className="inline-flex items-center px-6 py-3 text-base font-medium text-white transition-all duration-300 border border-transparent rounded-md shadow-sm bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                        {ctaText}
+                    </a>
+                </div>
+            </div>
+        </section>
     );
-  }
-
-  // If there's an error or no data, use default content
-  const services = serviceItems.length > 0 ? serviceItems : defaultServiceItems;
-  const title = servicesData?.title || "Our Services";
-  const subtitle = servicesData?.subtitle || "What We Offer";
-  const description =
-    servicesData?.content.description ||
-    "We provide a range of services to help your business grow and succeed.";
-  const ctaText = servicesData?.content.cta_text || "Learn More";
-  const ctaLink = servicesData?.content.cta_link || "#";
-  const note = servicesData?.content.note || "";
-
-  // If section is not active and we're not in development mode, don't render
-  if (!servicesData?.is_active && process.env.NODE_ENV !== "development") {
-    return null;
-  }
-
-  return (
-    <section id="services" className={`py-16 bg-white ${isRTL ? 'rtl' : 'ltr'}`}>
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {t('title', { defaultValue: title })}
-          </h2>
-          <p className="text-xl text-gray-600 mb-6">
-            {t('subtitle', { defaultValue: subtitle })}
-          </p>
-          <p className="max-w-3xl mx-auto text-gray-500">
-            {t('description', { defaultValue: description })}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => {
-            const IconComponent = iconMap[service.icon as keyof typeof iconMap] || HelpCircle;
-            return (
-              <ServiceCard
-                key={service.id}
-                title={service.title}
-                description={service.description}
-                icon={<IconComponent size={24} />}
-              />
-            );
-          })}
-        </div>
-
-        {note && (
-          <div className="mt-12 text-center">
-            <p className="text-sm text-gray-500 italic">{note}</p>
-          </div>
-        )}
-
-        <div className="mt-12 text-center">
-          <a
-            href={ctaLink}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-          >
-            {ctaText}
-          </a>
-        </div>
-      </div>
-    </section>
-  );
 };
 
 export default ServicesSection;
