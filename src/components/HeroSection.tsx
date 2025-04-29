@@ -1,4 +1,4 @@
-import { ArrowRight, Circle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
@@ -125,16 +125,6 @@ const HeroSection: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/40"></div>
             <div className="container relative z-10 px-4 py-24 mx-auto md:px-6">
                 <div className="max-w-3xl">
-                    <div className="inline-flex items-center px-4 py-1 mb-3 border rounded-full bg-white/10 backdrop-blur-sm border-accent-light">
-                        <Circle className="w-3 h-3 mr-2 fill-accent-light text-accent-light" />
-                        <h5 className="font-medium tracking-wider font-heading text-accent-light">
-                            {t(
-                                heroData.subtitle || 'subtitle',
-                                heroData.subtitle ||
-                                    'PROFESSIONAL VISA SERVICES'
-                            )}
-                        </h5>
-                    </div>
                     <h1 className="mb-6 text-4xl leading-tight text-white font-hero-title md:text-5xl lg:text-6xl">
                         {t(
                             'title',
