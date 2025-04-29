@@ -18,12 +18,14 @@ L.Icon.Default.mergeOptions({
 
 // Custom icon for locations - using a locally hosted marker to ensure it loads
 const customIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+    iconUrl:
+        'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    shadowUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+    shadowSize: [41, 41],
 });
 
 type MapLocation = {
@@ -53,10 +55,10 @@ type ContactSectionData = {
 // Helper function to split text at colon and format as label/value
 const formatColonText = (text: string) => {
     if (!text.includes(':')) return text;
-    
+
     const [label, ...valueParts] = text.split(':');
     const value = valueParts.join(':').trim();
-    
+
     return (
         <div className="flex flex-col md:flex-row md:items-baseline">
             <span className="font-semibold">{label.trim()}:</span>
@@ -73,12 +75,26 @@ const ContactSection = () => {
     const { t, i18n } = useTranslation('section.contact');
     const isRTL = i18n.dir() === 'rtl';
 
+    // Track current language to force refresh when language changes
+    const currentLanguage = i18n.language;
+
     useEffect(() => {
         fetchContactData();
-    }, []);
+
+        // Reload translations for this section
+        i18n.reloadResources(currentLanguage, ['section.contact']);
+    }, [currentLanguage]);
 
     const fetchContactData = async () => {
+        setLoading(true);
         try {
+            // Clear existing data from localStorage to force a fresh fetch
+            Object.keys(localStorage).forEach((key) => {
+                if (key.startsWith('i18next_section.contact')) {
+                    localStorage.removeItem(key);
+                }
+            });
+
             const { data, error } = await supabase
                 .from('landing_sections')
                 .select('*')
@@ -103,7 +119,8 @@ const ContactSection = () => {
         height: '500px',
         width: '100%',
         borderRadius: '0.75rem',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+        boxShadow:
+            '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     };
 
     if (loading) {
@@ -193,17 +210,25 @@ const ContactSection = () => {
     const mapLocations =
         contactData?.content?.map_locations ||
         defaultContactData.content.map_locations;
-        
+
     // Calculate map center based on locations
-    const mapCenter = mapLocations.length > 0 
-        ? [
-            mapLocations.reduce((sum, loc) => sum + loc.lat, 0) / mapLocations.length,
-            mapLocations.reduce((sum, loc) => sum + loc.lng, 0) / mapLocations.length
-          ] as [number, number]
-        : [-1.8, 102.7] as [number, number]; // Default center of Indonesia
+    const mapCenter =
+        mapLocations.length > 0
+            ? ([
+                  mapLocations.reduce((sum, loc) => sum + loc.lat, 0) /
+                      mapLocations.length,
+                  mapLocations.reduce((sum, loc) => sum + loc.lng, 0) /
+                      mapLocations.length,
+              ] as [number, number])
+            : ([-1.8, 102.7] as [number, number]); // Default center of Indonesia
 
     return (
-        <section id="contact" className={`py-16 ${isRTL ? 'rtl' : 'ltr'} bg-gradient-to-b from-white to-blue-50`}>
+        <section
+            id="contact"
+            className={`py-16 ${
+                isRTL ? 'rtl' : 'ltr'
+            } bg-gradient-to-b from-white to-blue-50`}
+        >
             <div className="container px-4 mx-auto md:px-6">
                 <div className="mb-12 text-center">
                     <div className="inline-flex items-center px-3 py-1 mb-3 rounded-full bg-primary/10">
@@ -212,7 +237,7 @@ const ContactSection = () => {
                             {subtitle}
                         </h5>
                     </div>
-                    <h2 className="mb-4 text-3xl font-bold md:text-4xl text-gray-800">
+                    <h2 className="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">
                         {title}
                     </h2>
                     <p className="max-w-2xl mx-auto text-gray-600">
@@ -222,20 +247,43 @@ const ContactSection = () => {
 
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     <div className="lg:col-span-1" data-aos="fade-right">
-                        <div className="p-6 overflow-hidden text-white rounded-xl shadow-lg bg-gradient-to-br from-primary to-primary-dark md:p-8 relative">
+                        <div className="relative p-6 overflow-hidden text-white shadow-lg rounded-xl bg-gradient-to-br from-primary to-primary-dark md:p-8">
                             {/* Background pattern */}
                             <div className="absolute inset-0 opacity-10">
-                                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                <svg
+                                    width="100%"
+                                    height="100%"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
                                     <defs>
-                                        <pattern id="contactPattern" patternUnits="userSpaceOnUse" width="40" height="40" patternTransform="rotate(45)">
-                                            <rect width="100%" height="100%" fill="none"/>
-                                            <circle cx="20" cy="20" r="2" fill="currentColor" />
+                                        <pattern
+                                            id="contactPattern"
+                                            patternUnits="userSpaceOnUse"
+                                            width="40"
+                                            height="40"
+                                            patternTransform="rotate(45)"
+                                        >
+                                            <rect
+                                                width="100%"
+                                                height="100%"
+                                                fill="none"
+                                            />
+                                            <circle
+                                                cx="20"
+                                                cy="20"
+                                                r="2"
+                                                fill="currentColor"
+                                            />
                                         </pattern>
                                     </defs>
-                                    <rect width="100%" height="100%" fill="url(#contactPattern)" />
+                                    <rect
+                                        width="100%"
+                                        height="100%"
+                                        fill="url(#contactPattern)"
+                                    />
                                 </svg>
                             </div>
-                            
+
                             <div className="relative z-10">
                                 <h3 className="mb-6 text-2xl font-bold">
                                     {t('contact_info_title', {
@@ -247,10 +295,8 @@ const ContactSection = () => {
                                     {contactInfo.address &&
                                         contactInfo.address.length > 0 && (
                                             <div className="flex items-start">
-                                                <div className="flex items-center justify-center p-3 mr-4 rounded-lg bg-white/20 text-white">
-                                                    <MapPin
-                                                        size={20}
-                                                    />
+                                                <div className="flex items-center justify-center p-3 mr-4 text-white rounded-lg bg-white/20">
+                                                    <MapPin size={20} />
                                                 </div>
                                                 <div>
                                                     <h4 className="font-bold text-white">
@@ -266,7 +312,9 @@ const ContactSection = () => {
                                                                     key={index}
                                                                     className="whitespace-pre-line"
                                                                 >
-                                                                    {formatColonText(addr)}
+                                                                    {formatColonText(
+                                                                        addr
+                                                                    )}
                                                                 </div>
                                                             )
                                                         )}
@@ -278,22 +326,25 @@ const ContactSection = () => {
                                     {contactInfo.phone &&
                                         contactInfo.phone.length > 0 && (
                                             <div className="flex items-start">
-                                                <div className="flex items-center justify-center p-3 mr-4 rounded-lg bg-white/20 text-white">
-                                                    <Phone
-                                                        size={20}
-                                                    />
+                                                <div className="flex items-center justify-center p-3 mr-4 text-white rounded-lg bg-white/20">
+                                                    <Phone size={20} />
                                                 </div>
                                                 <div>
                                                     <h4 className="font-bold text-white">
                                                         {t('phone', {
-                                                            defaultValue: 'Phone',
+                                                            defaultValue:
+                                                                'Phone',
                                                         })}
                                                     </h4>
                                                     <div className="mt-1 space-y-1">
                                                         {contactInfo.phone.map(
                                                             (phone, index) => (
-                                                                <div key={index}>
-                                                                    {formatColonText(phone)}
+                                                                <div
+                                                                    key={index}
+                                                                >
+                                                                    {formatColonText(
+                                                                        phone
+                                                                    )}
                                                                 </div>
                                                             )
                                                         )}
@@ -305,22 +356,25 @@ const ContactSection = () => {
                                     {contactInfo.email &&
                                         contactInfo.email.length > 0 && (
                                             <div className="flex items-start">
-                                                <div className="flex items-center justify-center p-3 mr-4 rounded-lg bg-white/20 text-white">
-                                                    <Mail
-                                                        size={20}
-                                                    />
+                                                <div className="flex items-center justify-center p-3 mr-4 text-white rounded-lg bg-white/20">
+                                                    <Mail size={20} />
                                                 </div>
                                                 <div>
                                                     <h4 className="font-bold text-white">
                                                         {t('email', {
-                                                            defaultValue: 'Email',
+                                                            defaultValue:
+                                                                'Email',
                                                         })}
                                                     </h4>
                                                     <div className="mt-1 space-y-1">
                                                         {contactInfo.email.map(
                                                             (email, index) => (
-                                                                <div key={index}>
-                                                                    {formatColonText(email)}
+                                                                <div
+                                                                    key={index}
+                                                                >
+                                                                    {formatColonText(
+                                                                        email
+                                                                    )}
                                                                 </div>
                                                             )
                                                         )}
@@ -330,12 +384,11 @@ const ContactSection = () => {
                                         )}
 
                                     {contactInfo.business_hours &&
-                                        contactInfo.business_hours.length > 0 && (
+                                        contactInfo.business_hours.length >
+                                            0 && (
                                             <div className="flex items-start">
-                                                <div className="flex items-center justify-center p-3 mr-4 rounded-lg bg-white/20 text-white">
-                                                    <Clock
-                                                        size={20}
-                                                    />
+                                                <div className="flex items-center justify-center p-3 mr-4 text-white rounded-lg bg-white/20">
+                                                    <Clock size={20} />
                                                 </div>
                                                 <div>
                                                     <h4 className="font-bold text-white">
@@ -347,8 +400,12 @@ const ContactSection = () => {
                                                     <div className="mt-1 space-y-1">
                                                         {contactInfo.business_hours.map(
                                                             (hours, index) => (
-                                                                <div key={index}>
-                                                                    {formatColonText(hours)}
+                                                                <div
+                                                                    key={index}
+                                                                >
+                                                                    {formatColonText(
+                                                                        hours
+                                                                    )}
                                                                 </div>
                                                             )
                                                         )}
@@ -362,7 +419,7 @@ const ContactSection = () => {
                     </div>
 
                     <div className="lg:col-span-2" data-aos="fade-left">
-                        <div className="overflow-hidden bg-white rounded-xl shadow-lg">
+                        <div className="overflow-hidden bg-white shadow-lg rounded-xl">
                             <h3 className="p-5 text-xl font-bold border-b border-gray-100">
                                 {t('our_locations', {
                                     defaultValue: 'Our Locations',
@@ -376,7 +433,7 @@ const ContactSection = () => {
                                         style={mapStyles}
                                         scrollWheelZoom={false}
                                     >
-                                        <TileLayer 
+                                        <TileLayer
                                             url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
                                         />

@@ -13,9 +13,6 @@ const useContentSync = () => {
         const loadResources = async () => {
             try {
                 await i18n.reloadResources();
-                console.log(
-                    'Translation resources loaded from local JSON files'
-                );
             } catch (error) {
                 console.error('Failed to load translation resources:', error);
             }

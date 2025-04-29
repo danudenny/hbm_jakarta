@@ -1,4 +1,3 @@
-import { ArrowRight } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
@@ -95,15 +94,6 @@ const HeroSection: React.FC = () => {
                                 'Expert consultation and comprehensive documentation services for foreign workers in Indonesia. We handle the complexity so you can focus on your work.'
                             )}
                         </p>
-                        <div className="flex flex-col gap-4 sm:flex-row">
-                            <a
-                                href="#services"
-                                className="btn btn-accent font-heading"
-                            >
-                                {t('cta_text', 'Our Services')}
-                                <ArrowRight size={18} className="ml-2" />
-                            </a>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -139,18 +129,6 @@ const HeroSection: React.FC = () => {
                                 'Expert consultation and comprehensive documentation services for foreign workers in Indonesia.'
                         )}
                     </p>
-                    <div className="flex flex-col gap-4 sm:flex-row">
-                        <a
-                            href={heroData.content.cta_link || '#services'}
-                            className="btn btn-accent font-heading"
-                        >
-                            {t(
-                                'cta_text',
-                                heroData.content.cta_text || 'Our Services'
-                            )}
-                            <ArrowRight size={18} className="ml-2" />
-                        </a>
-                    </div>
                 </div>
             </div>
         </section>

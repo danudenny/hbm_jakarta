@@ -2,6 +2,7 @@ import {
     ExternalLink,
     Facebook,
     Instagram,
+    Mail,
     MessageCircle,
     Phone,
     Plus,
@@ -68,6 +69,12 @@ const FloatingSocialEditor = () => {
                         icon: 'Phone',
                         color: '#4F46E5',
                     },
+                    {
+                        platform: 'Email',
+                        url: 'mailto:email@eemail.com',
+                        icon: 'Mail',
+                        color: '#E4405F',
+                    },
                 ];
 
                 // Insert default links if none exist
@@ -124,7 +131,7 @@ const FloatingSocialEditor = () => {
                     const { error: insertError } = await supabase
                         .from('floating_social_links')
                         .insert(newLink);
-                    
+
                     if (insertError) throw insertError;
                 } else {
                     // Existing link - update
@@ -137,7 +144,7 @@ const FloatingSocialEditor = () => {
                             color: link.color,
                         })
                         .eq('id', link.id);
-                    
+
                     if (updateError) throw updateError;
                 }
             }
@@ -146,7 +153,7 @@ const FloatingSocialEditor = () => {
             const { data: currentData, error: fetchError } = await supabase
                 .from('floating_social_links')
                 .select('id');
-            
+
             if (fetchError) throw fetchError;
 
             // Find IDs to delete (IDs in DB but not in current state)
@@ -164,7 +171,7 @@ const FloatingSocialEditor = () => {
                     .from('floating_social_links')
                     .delete()
                     .in('id', idsToDelete);
-                
+
                 if (deleteError) throw deleteError;
             }
 
@@ -184,9 +191,9 @@ const FloatingSocialEditor = () => {
         setSocialLinks([
             ...socialLinks,
             {
-                platform: '',
-                url: '',
-                icon: 'Link',
+                platform: 'Email',
+                url: 'mailto:example@example.com',
+                icon: 'Mail',
                 color: '#64748b',
             },
         ]);
@@ -208,6 +215,8 @@ const FloatingSocialEditor = () => {
                 return <MessageCircle size={20} />;
             case 'Phone':
                 return <Phone size={20} />;
+            case 'Mail':
+                return <Mail size={20} />;
             default:
                 return <ExternalLink size={20} />;
         }
@@ -234,9 +243,9 @@ const FloatingSocialEditor = () => {
         },
         { label: 'Phone', value: 'Phone', icon: 'Phone', color: '#4F46E5' },
         {
-            label: 'Other',
-            value: 'ExternalLink',
-            icon: 'ExternalLink',
+            label: 'Email',
+            value: 'Mail',
+            icon: 'Mail',
             color: '#64748b',
         },
     ];
@@ -339,6 +348,66 @@ const FloatingSocialEditor = () => {
                                                     'color',
                                                     selected.color
                                                 );
+
+                                                // Set a default URL format based on the platform
+                                                if (
+                                                    selected.icon === 'Mail' &&
+                                                    (!link.url ||
+                                                        !link.url.startsWith(
+                                                            'mailto:'
+                                                        ))
+                                                ) {
+                                                    handleInputChange(
+                                                        index,
+                                                        'url',
+                                                        'mailto:example@example.com'
+                                                    );
+                                                } else if (
+                                                    selected.icon === 'Phone' &&
+                                                    (!link.url ||
+                                                        !link.url.startsWith(
+                                                            'tel:'
+                                                        ))
+                                                ) {
+                                                    handleInputChange(
+                                                        index,
+                                                        'url',
+                                                        'tel:+1234567890'
+                                                    );
+                                                } else if (
+                                                    selected.icon ===
+                                                        'Facebook' &&
+                                                    (!link.url ||
+                                                        link.url === '')
+                                                ) {
+                                                    handleInputChange(
+                                                        index,
+                                                        'url',
+                                                        'https://facebook.com/'
+                                                    );
+                                                } else if (
+                                                    selected.icon ===
+                                                        'Instagram' &&
+                                                    (!link.url ||
+                                                        link.url === '')
+                                                ) {
+                                                    handleInputChange(
+                                                        index,
+                                                        'url',
+                                                        'https://instagram.com/'
+                                                    );
+                                                } else if (
+                                                    selected.icon ===
+                                                        'MessageCircle' &&
+                                                    (!link.url ||
+                                                        link.url === '')
+                                                ) {
+                                                    handleInputChange(
+                                                        index,
+                                                        'url',
+                                                        'https://wa.me/1234567890'
+                                                    );
+                                                }
                                             }
                                         }}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"

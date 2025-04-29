@@ -22,9 +22,20 @@ const TrustedBy = () => {
     const { t, i18n } = useTranslation('section.trustedby');
     const isRTL = i18n.dir() === 'rtl';
 
+    // Force refresh when language changes
+    const currentLanguage = i18n.language;
+
     useEffect(() => {
         const fetchTrustedByData = async () => {
+            setLoading(true);
             try {
+                // Clear existing data from localStorage to force a fresh fetch
+                Object.keys(localStorage).forEach((key) => {
+                    if (key.startsWith('i18next_section.trustedby')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
                 const { data, error } = await supabase
                     .from('landing_sections')
                     .select('*')
@@ -48,27 +59,10 @@ const TrustedBy = () => {
         };
 
         fetchTrustedByData();
-    }, []);
 
-    // Default companies as fallback
-    const defaultCompanies = [
-        {
-            name: 'Microsoft',
-            logo: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg',
-        },
-        {
-            name: 'Google',
-            logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-        },
-        {
-            name: 'Amazon',
-            logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
-        },
-        {
-            name: 'Apple',
-            logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
-        },
-    ];
+        // Reload translations for this section
+        i18n.reloadResources(currentLanguage, ['section.trustedby']);
+    }, [currentLanguage, i18n]);
 
     if (loading) {
         return (
@@ -90,10 +84,7 @@ const TrustedBy = () => {
         return null;
     }
 
-    const companies =
-        trustedByData.content?.companies?.length > 0
-            ? trustedByData.content.companies
-            : defaultCompanies;
+    const companies = trustedByData.content.companies;
 
     // Create two rows of logos for the carousel
     // For odd number of logos, make sure both rows have similar number of items
@@ -137,9 +128,7 @@ const TrustedBy = () => {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 md:text-3xl">
                         {t('title', {
-                            defaultValue:
-                                trustedByData.title ||
-                                'Trusted by Leading Companies Worldwide',
+                            defaultValue: trustedByData.title || '',
                         })}
                     </h2>
 
@@ -235,21 +224,21 @@ const TrustedBy = () => {
             <style
                 dangerouslySetInnerHTML={{
                     __html: `
-        @keyframes marquee-right {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
-        }
-        @keyframes marquee-left {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(0); }
-        }
-        .animate-marquee-right {
-          animation: marquee-right 30s linear infinite;
-        }
-        .animate-marquee-left {
-          animation: marquee-left 30s linear infinite;
-        }
-      `,
+                      @keyframes marquee-right {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(-100%); }
+                      }
+                      @keyframes marquee-left {
+                        0% { transform: translateX(-100%); }
+                        100% { transform: translateX(0); }
+                      }
+                      .animate-marquee-right {
+                        animation: marquee-right 30s linear infinite;
+                      }
+                      .animate-marquee-left {
+                        animation: marquee-left 30s linear infinite;
+                      }
+                    `,
                 }}
             />
         </section>

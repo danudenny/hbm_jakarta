@@ -39,16 +39,6 @@ const Navbar: React.FC = () => {
         fetchAvailableLanguages();
     }, []);
 
-    // Add debugging for settings object
-    useEffect(() => {
-        if (settings) {
-            console.log('Navbar - settings loaded:', settings);
-            console.log('Navbar - logo URL:', settings.company_logo);
-        } else {
-            console.log('Navbar - settings not loaded yet');
-        }
-    }, [settings]);
-
     const handleLanguageChange = (language: string) => {
         i18n.changeLanguage(language);
         setLanguageMenuOpen(false);

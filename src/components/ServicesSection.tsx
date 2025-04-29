@@ -1,5 +1,4 @@
 import {
-    ArrowRight,
     CreditCard,
     FileCheck,
     FileText,
@@ -51,9 +50,20 @@ const ServicesSection = () => {
     const { t, i18n } = useTranslation('section.services');
     const isRTL = i18n.dir() === 'rtl';
 
+    // Track current language to force refresh when language changes
+    const currentLanguage = i18n.language;
+
     useEffect(() => {
         const fetchServicesData = async () => {
+            setLoading(true);
             try {
+                // Clear existing data from localStorage to force a fresh fetch
+                Object.keys(localStorage).forEach((key) => {
+                    if (key.startsWith('i18next_section.services')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
                 const { data, error } = await supabase
                     .from('landing_sections')
                     .select('*')
@@ -76,53 +86,10 @@ const ServicesSection = () => {
         };
 
         fetchServicesData();
-    }, []);
 
-    // Default service items as fallback
-    const defaultServiceItems = [
-        {
-            id: '1',
-            icon: 'FileText',
-            title: 'Document Processing',
-            description:
-                'Efficient document processing services for all your business needs.',
-        },
-        {
-            id: '2',
-            icon: 'Plane',
-            title: 'Travel Arrangements',
-            description:
-                'Comprehensive travel management for corporate and leisure trips.',
-        },
-        {
-            id: '3',
-            icon: 'CreditCard',
-            title: 'Payment Solutions',
-            description:
-                'Secure and flexible payment processing for businesses of all sizes.',
-        },
-        {
-            id: '4',
-            icon: 'MapPin',
-            title: 'Location Services',
-            description:
-                'Precise location tracking and mapping for your business operations.',
-        },
-        {
-            id: '5',
-            icon: 'FileCheck',
-            title: 'Compliance Management',
-            description:
-                'Stay compliant with regulations with our comprehensive solutions.',
-        },
-        {
-            id: '6',
-            icon: 'Users',
-            title: 'HR Management',
-            description:
-                'Complete human resources management for your organization.',
-        },
-    ];
+        // Reload translations for this section
+        i18n.reloadResources(currentLanguage, ['section.services']);
+    }, [currentLanguage]);
 
     if (loading) {
         return (
@@ -135,8 +102,7 @@ const ServicesSection = () => {
     }
 
     // If there's an error or no data, use default content
-    const services =
-        serviceItems.length > 0 ? serviceItems : defaultServiceItems;
+    const services = serviceItems;
     const title = servicesData?.title || 'Our Services';
     const subtitle = servicesData?.subtitle || 'What We Offer';
     const description =
@@ -198,18 +164,6 @@ const ServicesSection = () => {
                                         defaultValue: service.description,
                                     })}
                                 </p>
-                                <a
-                                    href="#contact"
-                                    className="inline-flex items-center mt-auto text-sm font-medium text-primary group"
-                                >
-                                    <span className="transition-all duration-300 group-hover:mr-1">
-                                        Learn more
-                                    </span>
-                                    <ArrowRight
-                                        size={16}
-                                        className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
-                                    />
-                                </a>
                             </div>
                         );
                     })}

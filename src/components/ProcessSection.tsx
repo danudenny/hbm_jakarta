@@ -43,9 +43,20 @@ const ProcessSection = () => {
     const { t, i18n } = useTranslation('section.process');
     const isRTL = i18n.dir() === 'rtl';
 
+    // Track current language to force refresh when language changes
+    const currentLanguage = i18n.language;
+
     useEffect(() => {
         const fetchProcessData = async () => {
+            setLoading(true);
             try {
+                // Clear existing data from localStorage to force a fresh fetch
+                Object.keys(localStorage).forEach((key) => {
+                    if (key.startsWith('i18next_section.process')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
                 const { data, error } = await supabase
                     .from('landing_sections')
                     .select('*')
@@ -67,7 +78,10 @@ const ProcessSection = () => {
         };
 
         fetchProcessData();
-    }, []);
+
+        // Reload translations for this section
+        i18n.reloadResources(currentLanguage, ['section.process']);
+    }, [currentLanguage]);
 
     // Default steps as fallback
     const defaultSteps = [
