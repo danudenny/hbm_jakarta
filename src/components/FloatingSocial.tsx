@@ -34,13 +34,13 @@ const DEFAULT_SOCIAL_LINKS: Omit<SocialLink, 'id'>[] = [
     },
     {
         platform: 'WhatsApp',
-        url: 'https://wa.me/6281234567890',
+        url: 'https://wa.me/6282123009138?text=I%20am%20seeking%20consultation%20regarding%20visa%20and%20permit%20requirements.%20I%20would%20appreciate%20your%20assistance.',
         icon: 'MessageCircle',
         color: '#25D366',
     },
     {
         platform: 'Phone',
-        url: 'tel:+6281234567890',
+        url: 'tel:+6282123009138',
         icon: 'Phone',
         color: '#4F46E5',
     },
@@ -59,13 +59,13 @@ const FloatingSocial = () => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
-        
+
         // Initial check
         checkMobile();
-        
+
         // Add event listener for window resize
         window.addEventListener('resize', checkMobile);
-        
+
         // Cleanup
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
@@ -160,12 +160,14 @@ const FloatingSocial = () => {
 
     // For mobile: only show WhatsApp button at bottom left
     if (isMobile) {
-        const whatsappLink = socialLinks.find(link => link.platform === 'WhatsApp');
-        
+        const whatsappLink = socialLinks.find(
+            (link) => link.platform === 'WhatsApp'
+        );
+
         if (!whatsappLink) return null;
-        
+
         return (
-            <div className="fixed left-4 bottom-4 z-50">
+            <div className="fixed z-50 left-4 bottom-4">
                 <a
                     href={whatsappLink.url}
                     target="_blank"

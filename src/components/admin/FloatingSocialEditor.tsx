@@ -59,13 +59,13 @@ const FloatingSocialEditor = () => {
                     },
                     {
                         platform: 'WhatsApp',
-                        url: 'https://wa.me/6281234567890',
+                        url: 'https://wa.me/6282123009138?text=I%20am%20seeking%20consultation%20regarding%20visa%20and%20permit%20requirements.%20I%20would%20appreciate%20your%20assistance.',
                         icon: 'MessageCircle',
                         color: '#25D366',
                     },
                     {
                         platform: 'Phone',
-                        url: 'tel:+6281234567890',
+                        url: 'tel:+6282123009138',
                         icon: 'Phone',
                         color: '#4F46E5',
                     },
@@ -372,7 +372,7 @@ const FloatingSocialEditor = () => {
                                                     handleInputChange(
                                                         index,
                                                         'url',
-                                                        'tel:+1234567890'
+                                                        'tel:+6282123009138'
                                                     );
                                                 } else if (
                                                     selected.icon ===
@@ -405,7 +405,7 @@ const FloatingSocialEditor = () => {
                                                     handleInputChange(
                                                         index,
                                                         'url',
-                                                        'https://wa.me/1234567890'
+                                                        'https://wa.me/6282123009138?text=I%20am%20seeking%20consultation%20regarding%20visa%20and%20permit%20requirements.%20I%20would%20appreciate%20your%20assistance.'
                                                     );
                                                 }
                                             }
