@@ -288,13 +288,13 @@ const AppContent = () => {
                 <HeroSection />
               </Suspense>
               <Suspense fallback={<LoadingSpinner />}>
-                <TrustedBy />
-              </Suspense>
-              <Suspense fallback={<LoadingSpinner />}>
                 <ServicesSection />
               </Suspense>
               <Suspense fallback={<LoadingSpinner />}>
                 <ProcessSection />
+              </Suspense>
+              <Suspense fallback={<LoadingSpinner />}>
+                <TrustedBy />
               </Suspense>
               <Suspense fallback={<LoadingSpinner />}>
                 <AboutSection />
