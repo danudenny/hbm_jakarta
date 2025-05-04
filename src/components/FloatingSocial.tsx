@@ -21,18 +21,6 @@ interface SocialLink {
 // Default social links as a fallback if database fetch fails
 const DEFAULT_SOCIAL_LINKS: Omit<SocialLink, 'id'>[] = [
     {
-        platform: 'Facebook',
-        url: 'https://facebook.com',
-        icon: 'Facebook',
-        color: '#1877F2',
-    },
-    {
-        platform: 'Instagram',
-        url: 'https://instagram.com',
-        icon: 'Instagram',
-        color: '#E4405F',
-    },
-    {
         platform: 'WhatsApp',
         url: 'https://wa.me/6282123009138?text=I%20am%20seeking%20consultation%20regarding%20visa%20and%20permit%20requirements.%20I%20would%20appreciate%20your%20assistance.',
         icon: 'MessageCircle',
