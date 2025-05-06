@@ -22,7 +22,7 @@ interface SocialLink {
 const DEFAULT_SOCIAL_LINKS: Omit<SocialLink, 'id'>[] = [
     {
         platform: 'WhatsApp',
-        url: 'https://wa.me/6282123009138?text=I%20am%20seeking%20consultation%20regarding%20visa%20and%20permit%20requirements.%20I%20would%20appreciate%20your%20assistance.',
+        url: 'https://wa.me/6282123009138?text=Hello%2C%20I%20would%20like%20to%20request%20your%20kind%20assistance%20regarding%20the%20requirements%20for%20visas%20and%20permits.',
         icon: 'MessageCircle',
         color: '#25D366',
     },
