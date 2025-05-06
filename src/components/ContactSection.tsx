@@ -348,6 +348,15 @@ const ContactSection = () => {
                             <h3 className="text-lg font-bold text-primary">
                               {location.name}
                             </h3>
+                            <p className="text-sm text-gray-600 mt-1">{location.address}</p>
+                            <a 
+                              href={`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-block mt-3 px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary-dark transition-colors"
+                            >
+                              Go to Google Maps
+                            </a>
                           </div>
                         </Popup>
                       </Marker>
