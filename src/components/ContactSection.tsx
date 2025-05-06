@@ -330,9 +330,12 @@ const ContactSection = () => {
                     style={mapStyles}
                     scrollWheelZoom={false}
                   >
+                    {/* Changed from CartoDB to Google Street Map tiles */}
                     <TileLayer
-                      url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                      url="https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+                      maxZoom={20}
+                      subdomains={['mt0','mt1','mt2','mt3']}
+                      attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
                     />
                     {mapLocations.map((location) => (
                       <Marker
